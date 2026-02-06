@@ -150,6 +150,107 @@
     .nav-bar{position:static;overflow-x:auto;flex-wrap:nowrap} .trait-label{width:100px;font-size:12px}
     .cart-why-grid{grid-template-columns:1fr} .switcher{flex-direction:column}
   }
+
+  /* ─── INSIGHTS PANEL ─── */
+  .insights-toggle {
+    display:flex; align-items:center; justify-content:center; margin-bottom:24px;
+    animation:fadeUp 0.4s ease-out 0.1s both;
+  }
+  .insights-toggle-btn {
+    display:flex; align-items:center; gap:8px; padding:10px 24px;
+    background:var(--bg-card); border:2px solid var(--border); border-radius:var(--radius);
+    cursor:pointer; transition:all 0.25s; font-family:'Source Sans 3',sans-serif;
+    font-size:14px; font-weight:600; color:var(--text-muted);
+  }
+  .insights-toggle-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .insights-toggle-btn.active { border-color:var(--accent); background:var(--accent); color:#fff; }
+  .insights-toggle-btn .itg-icon { font-size:16px; }
+
+  .insights-panel {
+    display:none; animation:fadeUp 0.5s ease-out;
+  }
+  .insights-panel.visible { display:block; }
+
+  .insight-hero {
+    background:linear-gradient(135deg, #2C2420 0%, #4A3728 50%, #6B4D35 100%);
+    border-radius:var(--radius); padding:36px 32px; margin-bottom:24px;
+    color:#FAF7F2; position:relative; overflow:hidden;
+  }
+  .insight-hero::after {
+    content:''; position:absolute; top:0; right:0; bottom:0; left:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events:none;
+  }
+  .insight-hero .ih-label {
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2px;
+    text-transform:uppercase; color:var(--accent); margin-bottom:10px; font-weight:500;
+    position:relative; z-index:1;
+  }
+  .insight-hero h2 {
+    font-family:'Playfair Display',serif; font-size:32px; font-weight:700;
+    line-height:1.2; margin-bottom:12px; position:relative; z-index:1;
+  }
+  .insight-hero .ih-sub {
+    font-size:16px; opacity:0.8; line-height:1.6; max-width:700px;
+    position:relative; z-index:1;
+  }
+  .insight-avatars {
+    display:flex; gap:-8px; margin-top:16px; position:relative; z-index:1;
+  }
+  .insight-avatars img {
+    width:44px; height:44px; border-radius:50%; object-fit:cover;
+    border:3px solid #2C2420; margin-left:-8px;
+  }
+  .insight-avatars img:first-child { margin-left:0; }
+
+  .insight-card {
+    background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:16px; padding:24px; border:1px solid transparent; transition:border-color 0.2s;
+  }
+  .insight-card:hover { border-color:var(--border); }
+  .insight-card .ic-header {
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
+  .insight-card .ic-icon {
+    width:36px; height:36px; border-radius:var(--radius-sm); background:var(--accent-light);
+    display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+  }
+  .insight-card .ic-title {
+    font-family:'Playfair Display',serif; font-size:18px; font-weight:600;
+  }
+  .insight-card .ic-body { font-size:14px; line-height:1.75; color:var(--text); }
+  .insight-card .ic-body p { margin-bottom:12px; }
+  .insight-card .ic-body p:last-child { margin-bottom:0; }
+
+  .persona-compare {
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin:16px 0;
+  }
+  .pc-card {
+    background:var(--bg); border-radius:var(--radius-sm); padding:14px 16px;
+    border-top:3px solid var(--accent);
+  }
+  .pc-card .pc-name {
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.2px;
+    text-transform:uppercase; color:var(--accent); margin-bottom:6px; font-weight:500;
+  }
+  .pc-card .pc-label {
+    font-weight:700; font-size:13px; margin-bottom:3px;
+  }
+  .pc-card .pc-desc {
+    font-size:12px; color:var(--text-muted); line-height:1.5;
+  }
+
+  .insight-callout {
+    background:var(--accent-light); border-radius:var(--radius-sm); padding:16px 20px;
+    border-left:4px solid var(--accent); margin:16px 0; font-size:14px; line-height:1.7;
+  }
+  .insight-callout strong { color:var(--accent-dark); }
+
+  @media(max-width:700px){
+    .persona-compare { grid-template-columns:1fr; }
+    .insight-hero h2 { font-size:24px; }
+  }
+
 </style>
 </head>
 <body>
@@ -157,6 +258,162 @@
 
 <!-- PERSONA SWITCHER -->
 <div class="switcher" id="switcher"></div>
+
+
+<!-- INSIGHTS TOGGLE -->
+<div class="insights-toggle">
+  <button class="insights-toggle-btn" id="insightsToggle" onclick="toggleInsights()">
+    <span class="itg-icon">📊</span> Cross-Persona Comparative Insights
+  </button>
+</div>
+
+<!-- INSIGHTS PANEL -->
+<div class="insights-panel" id="insightsPanel">
+
+  <div class="insight-hero">
+    <div class="ih-label">Comparative Analysis</div>
+    <h2>$100 at Albertsons: Three Carts, Three Philosophies</h2>
+    <div class="ih-sub">Same budget, same store, same generation — but three fundamentally different relationships with food, cooking, and grocery shopping.</div>
+    <div class="insight-avatars" id="insightAvatars"></div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">🔗</div><div class="ic-title">The Common Thread</div></div>
+    <div class="ic-body">
+      <p>All three bought eggs (~$3.50), some form of hot sauce (Frank's RedHot for Isabella and Alex, Sriracha for Jordan), and a protein-forward strategy. They're all Gen Z, entry-level income, time-pressed, and trying to balance health aspirations with reality. Every cart came in right around $100 — nobody splurged or went minimal.</p>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">🧭</div><div class="ic-title">Shopping Philosophy</div></div>
+    <div class="ic-body">
+      <div class="persona-compare">
+        <div class="pc-card">
+          <div class="pc-name">Isabella</div>
+          <div class="pc-label">The Meal-Prep Influencer</div>
+          <div class="pc-desc">Cart built around a system — frozen protein backbone + photogenic produce + condiment variety. Aspirational but practical. Frozen wings are the workhorse; avocados and berries provide the TikTok aesthetic.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Alex</div>
+          <div class="pc-label">The Intentional Learner</div>
+          <div class="pc-desc">The only cart with foundational aromatics — cilantro, limes, garlic, onions, olive oil. Not just assembling meals, he's building flavors and learning technique. Could produce genuinely good food if he executes.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Jordan</div>
+          <div class="pc-label">The Logistics Optimizer</div>
+          <div class="pc-desc">Highest ratio of pre-made to raw ingredients by far. Beyond Burgers, Kind bars, frozen kits, instant rice, rotisserie chicken. Zero fresh vegetables. Solving "the not-starve equation" as efficiently as possible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">📈</div><div class="ic-title">Cooking Skill as a Spectrum</div></div>
+    <div class="ic-body">
+      <div class="persona-compare">
+        <div class="pc-card">
+          <div class="pc-name">Alex — Building Skills</div>
+          <div class="pc-label">Aromatics & Technique</div>
+          <div class="pc-desc">Buys cilantro, limes, garlic, onions, decent olive oil. Chooses chicken thighs over breasts because he knows they're more forgiving. That's a cooking-knowledge signal, not just a price decision.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Isabella — Has a System</div>
+          <div class="pc-label">Framework Shopping</div>
+          <div class="pc-desc">Frozen protein + fresh produce + condiment variety creates 3 different meals (Buffalo, ranch salad, roasted bowl) without learning new techniques. Efficient and repeatable.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Jordan — Opted Out</div>
+          <div class="pc-label">Pre-Made Everything</div>
+          <div class="pc-desc">Nearly everything is ready-to-eat or requires minimal intervention. The frozen dumplings are the one "cooking" item. Same age range, same income — completely different engagement with food prep.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">🌎</div><div class="ic-title">How Culture Shows Up in the Cart</div></div>
+    <div class="ic-body">
+      <div class="persona-compare">
+        <div class="pc-card">
+          <div class="pc-name">Alex</div>
+          <div class="pc-label">Heritage Drives Ingredients</div>
+          <div class="pc-desc">Black beans ("my mom always had beans"), cilantro, limes — he's cooking what he grew up eating, with his own twist. Culture shapes actual purchase decisions.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Jordan</div>
+          <div class="pc-label">Heritage via Convenience</div>
+          <div class="pc-desc">Korean dumplings are the one cultural connection — but through the frozen aisle, not cooking from scratch. Heritage shows up as the single convenience exception.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Isabella</div>
+          <div class="pc-label">TikTok Over Tradition</div>
+          <div class="pc-desc">Mexican-American background is present in her profile but doesn't strongly shape her cart. She's shopping more from social media influence than cultural tradition.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">🪞</div><div class="ic-title">The Honesty Gradient</div></div>
+    <div class="ic-body">
+      <div class="persona-compare">
+        <div class="pc-card">
+          <div class="pc-name">Isabella</div>
+          <div class="pc-label">Most Curated</div>
+          <div class="pc-desc">Everything fits a narrative. Ranch dressing is the one honest admission — she knows she'll dip carrots in it and she's fine with it. The cart is aspirational but internally consistent.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Alex</div>
+          <div class="pc-label">Self-Aware & Earnest</div>
+          <div class="pc-desc">Knows pre-cut broccoli costs more but admits he'll actually eat it. The olive oil "investment" framing shows he's thinking about his choices, not just buying.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Jordan</div>
+          <div class="pc-label">Brutally Honest</div>
+          <div class="pc-desc">Calls out his guilt purchase, admits he'd never actually use Albertsons' website, frames the whole exercise as efficiency optimization. No pretense.</div>
+        </div>
+      </div>
+      <div class="insight-callout">
+        <strong>Research Value:</strong> This honesty gradient itself is valuable data about how each segment talks about their shopping behavior — from curated narrative to raw transparency.
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">🏪</div><div class="ic-title">Where Albertsons Wins and Loses</div></div>
+    <div class="ic-body">
+      <p><strong>Isabella and Alex</strong> found enough to fill meaningful carts. Isabella's system works at Albertsons — frozen proteins, fresh produce, condiments are all available. Alex found his cultural staples (beans, cilantro, limes) alongside mainstream items. Both represent capturable in-store or online traffic.</p>
+      <p><strong>Jordan's cart is functionally a critique</strong> of the Albertsons experience. He explicitly says he'd prefer Instacart or Amazon Fresh for better filtering ("I can search 'high-protein' and actually get results"), subscription perks ("I'm already paying for Amazon Prime"), faster delivery ("same-day in Seattle"), and better product reviews.</p>
+      <div class="insight-callout">
+        <strong>Competitive Threat:</strong> Jordan's feedback isn't about price or selection — it's about <em>experience design</em>. The digital-first segment is telling Albertsons exactly what the competitive moat looks like: search intelligence, subscription lock-in, and delivery speed. Product availability alone won't win them back.
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-card">
+    <div class="ic-header"><div class="ic-icon">💡</div><div class="ic-title">Key Takeaways for Research</div></div>
+    <div class="ic-body">
+      <div class="persona-compare">
+        <div class="pc-card">
+          <div class="pc-name">Insight 1</div>
+          <div class="pc-label">Same Demo, Different Carts</div>
+          <div class="pc-desc">Gen Z, entry-level income, and urban living don't predict shopping behavior. Philosophy toward cooking matters more than demographics.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Insight 2</div>
+          <div class="pc-label">Convenience Has Layers</div>
+          <div class="pc-desc">Isabella's "convenience" is frozen protein for a meal-prep system. Alex's is pre-cut broccoli within a cooking workflow. Jordan's is the entire cart. Same word, different meanings.</div>
+        </div>
+        <div class="pc-card">
+          <div class="pc-name">Insight 3</div>
+          <div class="pc-label">Hot Sauce Is Universal</div>
+          <div class="pc-desc">The one item all three bought. Flavor enhancement as a non-negotiable across all cooking skill levels — from "I don't cook" to "I'm learning why things work."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <!-- DYNAMIC CONTENT -->
 <div class="persona-content" id="personaContent"></div>
@@ -662,6 +919,39 @@ function toggleSection(header) { header.parentElement.classList.toggle('open'); 
 
 renderSwitcher();
 renderPersona();
+
+function toggleInsights() {
+  const panel = document.getElementById('insightsPanel');
+  const btn = document.getElementById('insightsToggle');
+  const content = document.getElementById('personaContent');
+  const isVisible = panel.classList.contains('visible');
+  
+  if (isVisible) {
+    panel.classList.remove('visible');
+    btn.classList.remove('active');
+    content.style.display = '';
+  } else {
+    panel.classList.add('visible');
+    btn.classList.add('active');
+    content.style.display = 'none';
+    // Populate avatars
+    const avatarDiv = document.getElementById('insightAvatars');
+    avatarDiv.innerHTML = Object.values(PERSONAS).map(p =>
+      `<img src="${p.photo}" alt="${p.name}" title="${p.name}">`
+    ).join('');
+    panel.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+// When switching personas, close insights
+const _origSwitch = switchPersona;
+switchPersona = function(key) {
+  document.getElementById('insightsPanel').classList.remove('visible');
+  document.getElementById('insightsToggle').classList.remove('active');
+  document.getElementById('personaContent').style.display = '';
+  _origSwitch(key);
+};
+
 </script>
 </body>
 </html>
